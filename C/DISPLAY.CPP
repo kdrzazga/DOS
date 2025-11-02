@@ -1,0 +1,36 @@
+#include <graphics.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+
+void load_image_and_display(const char *filename, int width, int height) {
+    unsigned char *buffer = (unsigned char *)malloc(width * height * 3);
+    if (buffer == NULL) {
+        printf("Memory allocation failed.\n");
+        return;
+    }
+
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        printf("Failed to open file for reading.\n");
+        free(buffer);
+        return;
+    }
+
+    fread(buffer, 1, width * height * 3, fp);
+    fclose(fp);
+
+    putimage(0, 0, buffer, COPY_PUT);
+    free(buffer);
+}
+
+void main(){
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "c:\\borlandc\\bgi");
+
+    load_image_and_display("VIKING.PIC", 627, 252);
+
+    getch();
+    closegraph();
+
+}
